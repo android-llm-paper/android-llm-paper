@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% block content %}
+<div><h3>{{ firmware.fingerprint }}</h3><button type="button" class="btn btn-primary">打开 JADX</button></div>
+<div>快捷键：X - 忽略；C - 标注；J - 跳转至JADX</div>
+<div class="d-flex">
+    <div class="overflow-y-scroll" style="width: 50%;  max-height: 100vh;">
+        <table class="table table-hover" id="result-table">
+            <thead>
+                <tr>
+                    <th scope="col">接口</th>
+                    <th scope="col">安全验证</th>
+                    <th scope="col">身份管理</th>
+                    <th scope="col">敏感</th>
+                    <th scope="col">非空</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for fn in interfaces %}
+                <tr data-id="{{ fn._id }}">
+                    <td>{{ fn.serviceName }}<br><code>{{ fn.source.splitlines()[0] }}</code></td>
+                    <td>
+                        <span class="{% if fn.containsSecurityCheck < (fn.results | length) %}text-danger{% endif %}">{{ fn.containsSecurityCheck }}</span>
+                    </td>
+                    <td><span class="{% if fn.clearsCallingIdentity > 0 %}text-danger{% endif %}">{{ fn.clearsCallingIdentity }}</span></td>
+                    <td><span class="{% if fn.sensitive > 0 %}text-danger{% endif %}">{{ fn.sensitive }}</span></td>
+                    <td>{{ fn.isNotEmpty }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div><div class="overflow-y-scroll" style="width: 50%; max-height: 100vh;">
+        <div class="row">
+            <pre><code id="desc-text"></code></pre>
+        </div>
+        <div class="row">
+            <code id="desc-caller"></code>
+        </div>
+        <div class="row">
+            <code id="desc-sig"></code>
+        </div>
+        <div class="row">
+            <pre style="white-space: pre-wrap;"><code id="code-container" class="language-java"></code></pre>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+<script>
+    const codeEl = document.getElementById("code-container");
+    const descTextEl = document.getElementById("desc-text");
+    const descCallerEl = document.getElementById("desc-caller");
+    const descSigEl = document.getElementById("desc-sig");
+
+    async function showSource(rowId) {
+        let res = await (await fetch(`/api/interface/${rowId}`)).json()
+
+        codeEl.removeAttribute("data-highlighted")
+        codeEl.textContent = res.source
+        hljs.highlightElement(codeEl)
+
+        descTextEl.textContent = JSON.stringify(res.results, null, 2)
+        descSigEl.textContent = res.callee.signature
+        descCallerEl.textContent = res.caller.signature
+    }
+
+    function findParentTr(el) {
+        let current = el;
+        while (current != null && current.tagName !== "BODY") {
+            if (current.tagName === "TR") {
+                return current;
+            }
+            current = current.parentElement;
+        }
+        return null;
+    }
+
+    const tableEl = document.getElementById("result-table")
+
+
+    let activeRow = null;
+    tableEl.addEventListener("click", function (ev) {
+        let tr = findParentTr(ev.target);
+        if (tr != null) {
+            let rowId = tr.getAttribute("data-id");
+            showSource(rowId);
+
+            // add table-active class to the clicked row
+            if (activeRow != null) {
+                activeRow.classList.remove("table-active");
+            }
+            tr.classList.add("table-active");
+
+            activeRow = tr;
+        }
+    })
+
+    async function removeRow(id) {
+        let res = await fetch(`/api/interface/${id}/ignore`, {
+            method: "PUT"
+        })
+        return res.ok;
+    }
+
+
+    document.body.addEventListener("keydown", function (ev) {
+        if (ev.key === "x" && activeRow != null) {
+            // Remove the active row
+            let rowId = activeRow.getAttribute("data-id");
+            removeRow(rowId).then((ok) => {
+                if (ok) {
+                    activeRow.remove();
+                    activeRow = null;
+                }
+            })
+        }
+    })
+</script>
+{% endblock %}

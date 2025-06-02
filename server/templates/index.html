@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block content %}
+<div>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">下载网络固件</button>
+    <button type="button" class="btn btn-primary">上传本地固件</button>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">下载网络固件</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="input-group mb-3">
+                <span class="input-group-text" id="basic-addon1">URL</span>
+                <input type="text" class="form-control" placeholder="https://dumps.tadiphone.dev/dumps/..." aria-label="URL" aria-describedby="basic-addon1">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+          <button type="button" class="btn btn-primary">开始下载</button>
+        </div>
+      </div>
+    </div>
+  </div>  
+<div>
+    <table class="table table-hover" id="result-table">
+        <thead>
+            <tr>
+                <th scope="col">品牌</th>
+                <th scope="col">型号</th>
+                <th scope="col">Android 版本（安全补丁）</th>
+                <th scope="col">构建指纹</th>
+                <th scope="col">总接口数</th>
+                <th>自定义接口数</th>
+                <th>自定义接口数（可访问）</th>
+                <th>已分析</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fw in firmwares %}
+            <tr>
+                <td>
+                    {{ fw.obj.brand }}
+                </td>
+                <td>
+                    {{ fw.obj.product }}
+                </td>
+                <td>
+                    {{fw.obj.release}}（{{ fw.obj.securityPatch }}）
+                </td>
+                <td>
+                    <a href="/firmware/{{ fw.obj._id }}">{{ fw.obj.fingerprint }}</a>
+                    {% if fw.obj.isBaseline %}
+                        <span class="badge bg-primary">基线</span>
+                    {% else %}
+                        {% if fw.analyzeStatus.get(0, 0) == fw.customAndAccessible %}
+                            <span class="badge bg-danger">未分析</span>
+                        {% elif fw.analyzeStatus.get(3, 0) == fw.customAndAccessible %}
+                            <span class="badge bg-success">分析完成</span>
+                        {% else %}
+                            <span class="badge bg-warning">分析中</span>
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td>
+                    {{ fw.total }}
+                </td>
+                <td>
+                    {{ fw.custom }} {% if fw.total > 0 %}{{ (fw.custom / fw.total * 100) | round(2) }}{% else %}0{% endif %}%
+                </td>
+                <td>
+                    {{ fw.customAndAccessible }} {{ (fw.customAndAccessible / fw.total * 100) | round(2) }}%
+                </td>
+                <td>
+                    {% if fw.obj.isBaseline %}
+                        基线
+                    {% else %}
+                        {{ fw.analyzeStatus.get(3, 0) }} {{ (fw.analyzeStatus.get(3, 0) / fw.customAndAccessible * 100) | round(2) }}%
+                    {% endif %}
+                </td>
+                <td>
+                    {% if not fw.obj.isBaseline %}
+                        {% if fw.analyzeStatus.get(0, 0) == fw.customAndAccessible %}
+                            <a href="/firmware/{{ fw.obj._id }}/analyze" class="btn btn-primary">开始分析</a>
+                        {% elif fw.analyzeStatus.get(3, 0) == fw.customAndAccessible %}
+                        {% else %}
+                            <a href="/firmware/{{ fw.obj._id }}/analyze" class="btn btn-warning">中断分析</a>
+                        {% endif %}
+                        <a href="/firmware/{{ fw.obj._id }}/analyze" class="btn btn-primary">重新分析</a>
+                    {% endif %}
+                    <a href="/firmware/{{ fw.obj._id }}/delete" class="btn btn-danger">删除</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}
+
+{% block footer %}
+
+{% endblock %}

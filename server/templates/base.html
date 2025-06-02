@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bootstrap demo</title>
+  <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+</head>
+
+<body>
+  <div class="d-flex" style="height: 100vh;">
+    <div class="d-flex flex-column flex-shrink-0 p-3 text-white bg-dark" style="width: 280px; height: 100%;">
+      <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+        <span class="fs-4">系统漏洞检测平台</span>
+      </a>
+      <hr>
+      <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+          <a href="" class="nav-link text-white">固件管理</a>
+        </li>
+        <li class="nav-item">
+          <a href="" class="nav-link text-white">配置管理</a>
+        </li>
+      </ul>
+    </div>
+    <div class="flex-grow-1 p-2" style="max-width: calc(100% - 280px);">{% block content %}{% endblock %}</div>
+  </div>
+  
+  <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='highlight.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='java.min.js') }}"></script>
+  <script>
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+  </script>
+  {% block footer %}{% endblock %}
+</body>
+
+</html>
