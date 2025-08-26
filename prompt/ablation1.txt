@@ -1,0 +1,24 @@
+## Task Instructions
+
+You will be provided with a set of methods from an Android system, including a primary method and its related dependencies.
+
+Your task is to determine whether this code has potential value for exploitation.
+
+### Output Format (JSON)
+Only return the JSON object with the key `is_sensitive` and a boolean value. No additional text or explanation.
+
+{
+  "is_sensitive": true | false
+}
+
+## Method for Analysis
+
+"""
+// Primary Method Signature: 
+signature_placeholder
+
+// Full Method Implementations (Primary + Dependencies): 
+method_placeholder
+"""
+
+JSON MODE: {"type": "json_object"}

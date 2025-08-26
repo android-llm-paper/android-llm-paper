@@ -1,0 +1,61 @@
+## Task Instructions
+
+You will be provided with a sensitivity analysis result from a prior LLM evaluation. This result includes:
+    A description field that summarizes:
+        - The functionality of a specific Android system interface method.
+        - The original reasoning for why the method was flagged as sensitive.
+
+Your task is to **re-evaluate** the original judgment and determine whether the method's sensitivity is based on a **low-impact reason** that justifies excluding it from further analysis.
+
+---
+
+### Please perform the following steps:
+
+1. **Review the description text exactly as written.**
+   - **Do not infer, guess, or assume** any information beyond what is explicitly stated.
+
+2. **Only exclude the method if the description explicitly indicates** one of the following two cases:
+   - **(1) Auxiliary Only**:
+     The description explicitly states that the method only **assists an attacker indirectly**, such as by revealing:
+     - Security policy configurations
+     - Internal flags
+     - Feature availability
+     - Required permissions
+
+   - **(2) Policy Introspection Only**:
+     The method only **retrieves information** about current **security policies**, enforcement flags, or feature configurations (e.g., KNOX policies, enterprise settings).
+     The description indicates this info might **help an attacker** understand the system’s state, but **cannot itself cause harm** or violate permissions.
+
+3. **Make a Filtering Decision**
+    - If either of the above reasons is the only justification in the description, consider the method not security-relevant enough and set the output field is_security_significant to false.
+    - **If neither condition is clearly met based on the description, keep it.**
+
+4. **Important Exception – User-Related Data**
+   - If the description mentions any access to **user behavior, preferences, decisions, usage status, identity, or input**, the method **must be considered sensitive** unless clearly proven otherwise.
+
+---
+
+> **Note:**
+> 1. **Do NOT** speculate about what the method might do based on intuition or typical naming.
+> 2. **Do NOT** downgrade sensitivity unless the relevant reason is **explicitly mentioned** in the description.
+
+---
+### Output Format (JSON)
+
+Only return the following JSON object:
+
+```json
+{
+  "is_security_significant": true | false,
+  "description": "1–3 sentences explaining your judgment based on the original description"
+}
+
+## Prior LLM Sensitivity Analysis Output
+
+"""
+// Functionality Description:
+functionality_description_placeholder
+
+// Reasoning Description:
+reasoning_placeholder
+"""

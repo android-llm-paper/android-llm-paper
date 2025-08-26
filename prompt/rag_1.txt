@@ -1,0 +1,44 @@
+## Task Instructions
+
+You will be provided with a set of methods from an Android system, including the Java implementation of a primary method and its dependencies, along with the signature of the primary method.
+
+Your task is to:
+1. Analyze this code based on its class name, method name, and code semantics.
+2. Determine which system module(s) it belongs to.
+3. Summarize the primary functionality implemented by the method(s) in 1–2 concise sentences.
+4. Determine whether the method **alters system state or behavior** (e.g., changes settings, enables/disables features, starts/stops services, modifies internal state, etc.).
+
+> **Note:**
+> 1. Select the **single most relevant system module** whenever possible. If the method clearly involves two distinct areas of functionality, or if the functionality is ambiguous and a definitive classification is not possible, you may include up to **two** system modules.
+> 2. **Only choose from the predefined categories. Do not create new ones.**
+> 3. When summarizing functionality, pay special attention to whether the method **retrieves or alters system state, device data, or contextual information**.
+>    - Methods like `getX`, `isXEnabled` or `checkStatus` are generally **state-retrieving**.
+>    - Methods like `setX`, `enableX`, `disableX`, `stopX`, or `cancelX` are generally **state-altering**.
+>    - Use your best judgment when semantics are ambiguous (e.g., `determineX` or `updateY`).
+> 4. Set the `is_state_altering` field to `true` if the method **modifies any part of system behavior or state**, otherwise set it to `false`.
+> 5. Do not infer or assume additional behaviors beyond what is explicitly implemented in the code. Base your summary only on what the method actually does.
+
+
+### Categories:
+NFC, Contacts, Telephony, Messaging, Network, Window Management, Permission Management, Security, User Settings, Media, Storage, Device Management, Data Process, Package Management, Account Management, WiFi, Authentication, Notification, Bluetooth, System Services, Hardware/Sensor, Input, Developer, UI, Graphics, Location, Activity Management, Multi-User Management, Accessibility, Audio, Car, Power Management, TV
+
+### Output Format (JSON):
+{
+  "system_module": ["module_name1", "module_name2"],
+  "functionality_description": "Concise summary of what the method(s) do, based on semantics and behavior.",
+  "is_state_altering": true | false
+}
+
+## Code for Analysis
+
+Please analyze the following method set:
+
+"""
+// Primary Method Signature:
+signature_placeholder
+
+// Full Method Implementations (Primary + Dependencies):
+method_placeholder
+"""
+
+JSON MODE: {"type": "json_object"}

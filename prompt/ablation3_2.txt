@@ -1,0 +1,34 @@
+## Task Instructions
+
+You will be provided with:
+1. A description of the functionality implemented by a method in a customized Android system.
+2. A boolean indicator `is_state_altering`, specifying whether the method modifies system state or behavior (e.g., starts or stops services, changes settings, updates internal state).
+3. Retrieved reference knowledge, which includes previously vulnerable or permission-protected functionalities within the same system module.
+
+Your task is to determine whether this functionality presents potential value for exploitation.
+
+### Output Format (JSON)
+Only return the JSON object with the following fields:
+- `is_sensitive`: a boolean value
+
+{
+  "is_sensitive": true | false,
+}
+
+## Functionality Description
+
+"""
+description_placeholder
+"""
+
+## State-Altering Indicator
+"""
+is_state_altering_placeholder
+"""
+
+## Retrieved Reference Knowledge
+"""
+knowledge_placeholder
+"""
+
+JSON MODE: {"type": "json_object"}

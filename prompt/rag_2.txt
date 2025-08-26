@@ -1,0 +1,46 @@
+## Task Instructions
+
+You will be provided with:
+1. A description of the functionality implemented by a method in a customized Android system.
+2. A boolean indicator `is_state_altering`, specifying whether the method modifies system state or behavior (e.g., starts or stops services, changes settings, updates internal state).
+3. Retrieved reference knowledge, which includes previously vulnerable or permission-protected functionalities within the same system module.
+
+Your task is to determine whether this functionality presents potential value for exploitation.
+
+### Please perform the following steps:
+1. Analyze the provided **functionality description** and the **`is_state_altering`** flag to understand what the method is designed to do.
+2. Based on the retrieved knowledge and your own understanding, assess whether this functionality could be considered **sensitive**, **exploitable**, or **potentially useful to an attacker**.
+
+> Note:
+1. The retrieved knowledge only covers functionalities in **AOSP (Android Open Source Project)**, whereas the method comes from a **customized Android system**. Therefore, the reference knowledge does **not comprehensively cover** all exploit-worthy functionalities. You may use the retrieved knowledge to inform your judgment, but **do not treat it as exhaustive or limiting**.
+2. **State-altering methods** tend to have greater potential for abuse than **read-only methods**, unless the latter expose **sensitive data** such as user information or device identifiers.
+3. Do not speculate beyond the provided functionality description. Avoid inferring additional behaviors or risks not clearly indicated by the description.
+
+### Output Format (JSON)
+Only return the JSON object with the following fields:
+- `is_sensitive`: a boolean value
+- `description`: (optional) a brief explanation of your reasoning in 1–3 sentences
+If included, the description should provide clear reasoning based on the functionality and/or retrieved knowledge.
+
+{
+  "is_sensitive": true | false,
+  "description": "optional_reasoning_here"
+}
+
+## Functionality Description
+
+"""
+description_placeholder
+"""
+
+## State-Altering Indicator
+"""
+is_state_altering_placeholder
+"""
+
+## Retrieved Reference Knowledge
+"""
+knowledge_placeholder
+"""
+
+JSON MODE: {"type": "json_object"}

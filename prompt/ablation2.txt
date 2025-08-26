@@ -1,0 +1,30 @@
+## Task Instructions
+
+You will be provided with a set of methods from an Android system, including the Java implementation of a primary method and its dependencies, along with the signature of the primary method.
+
+Your task is to determine whether this code has potential value for exploitation.
+
+### Please perform the following steps:
+1. Analyze the method set holistically, including class names, method names, and code semantics, to understand the overall system functionality implemented.
+2. Based solely on your own understanding, assess whether this functionality could be considered **sensitive**, **exploitable**, or **potentially useful to an attacker**.
+
+> Note: **getter-style methods** are generally **less likely** to introduce security risks than **setter-style methods**, unless they expose **sensitive data** such as user information, or device identifiers. Please avoid overestimating the sensitivity of innocuous accessors.
+
+### Output Format (JSON)
+Only return the JSON object with the key `is_sensitive` and a boolean value. No additional text or explanation.
+
+{
+  "is_sensitive": true | false
+}
+
+## Method for Analysis
+
+"""
+// Primary Method Signature: 
+signature_placeholder
+
+// Full Method Implementations (Primary + Dependencies): 
+method_placeholder
+"""
+
+JSON MODE: {"type": "json_object"}

@@ -1,0 +1,51 @@
+## Task Instructions
+
+You will be provided with:
+- The full method signature of an Android Binder interface.
+- The full Java implementation of that method, along with any supporting dependencies.
+
+This method has been previously identified as having **no access control** and performing **potentially sensitive operations**. Your task is to determine whether it poses a **meaningful security impact** based on **its scope of influence**.
+
+---
+
+### Please perform the following steps:
+
+1. **Determine the Scope of Impact**
+   Analyze the method's logic to determine **which processes, packages, or components** may be affected when it is called:
+   - Does the method only affect the calling process (i.e., its own app)?
+   - Does it affect another target app or UID specified via parameters?
+   - Does it perform actions that impact the device globally (e.g., system services, global settings, shared resources)?
+
+2. **Evaluate Security Impact**
+   Based on the scope above, assess whether the method’s operations could **impact other apps or the device as a whole**.
+   - If the method can only affect its **own process**, the potential security impact is minimal.
+   - If it can affect **other apps, system services, or device-wide behavior**, it poses a higher security risk.
+
+---
+
+> **Note:**
+> 1. Pay close attention to whether the method accepts parameters like **UIDs**, **package names**, **component names**, or uses **system APIs** that operate on shared resources.
+> 2. Avoid speculation. Base your judgment strictly on what the method **explicitly does**, not on assumed usage scenarios.
+
+---
+
+### Output Format (JSON):
+Return a single JSON object with the following fields:
+
+```json
+{
+  "has_cross_process_impact": true | false,
+  "description": "Brief justification (1–3 sentences) explaining how the method affects other apps or the device, or why it does not."
+}
+
+## Code for Analysis
+
+Please analyze the following method set:
+
+"""
+// Primary Method Signature:
+signature_placeholder
+
+// Full Method Implementations (Primary + Dependencies):
+method_placeholder
+"""
